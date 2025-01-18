@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  crawler:
+    platform: linux/arm64/v8
+    image: unclecode/crawl4ai:basic-arm64
+    ports:
+      - "11235:11235"
+    environment:
+      - PORT=11235
+      - MAX_CONCURRENT_TASKS=5
+      - PYTHONUNBUFFERED=1
+    command: ["uvicorn", "crawl4ai.server:app", "--host", "0.0.0.0", "--port", "11235"]
