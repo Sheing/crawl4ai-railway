@@ -1,19 +1,22 @@
-FROM --platform=linux/arm64/v8 unclecode/crawl4ai:basic-arm64
+FROM --platform=linux/arm64/v8 python:3.9-slim
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
+    chromium \
+    chromium-driver \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip and install uvicorn
-RUN pip3 install --no-cache-dir --upgrade pip && \
-    pip3 install --no-cache-dir uvicorn[standard]
+# Install crawl4ai and its dependencies
+RUN pip3 install --no-cache-dir \
+    crawl4ai \
+    'uvicorn[standard]>=0.12.0'
 
 # Environment variables
 ENV PYTHONUNBUFFERED=1
 ENV MAX_CONCURRENT_TASKS=5
 ENV PORT=11235
+ENV PYTHONPATH=/usr/local/lib/python3.9/site-packages
 
 # Expose the port
 EXPOSE 11235
